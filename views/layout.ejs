@@ -24,17 +24,29 @@
 
         <nav class="nav">
             <a href="#">Crear Grupo</a>
-            <a href="#">Iniciar Sesión</a>
+            <a href="/iniciar-sesion">Iniciar Sesión</a>
             <a href="/crear-cuenta">Registrarse</a>
         </nav>
     </header>
+
+    <% if(locals.messages) { %>
+        <% const categoria = Object.keys(locals.messages) %>
+        <% if(categoria.length) { %>
+            <% locals.messages[categoria].forEach(alerta => { %>
+                <div class="alertas">
+                    <p class="alerta <%= categoria %>"> <%= alerta %></p>                    
+                </div>            
+            <% }) %>
+            <% } %>
+    <% } %>
+
     <%- body%>
 
         <footer class="site-footer contenedor">
 
             <nav class="nav">
                 <a href="#">Crear Grupo</a>
-                <a href="#">Iniciar Sesión</a>
+                <a href="/iniciar-sesion">Iniciar Sesión</a>
                 <a href="/crear-cuenta">Registrarse</a>
             </nav>
 

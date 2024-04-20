@@ -1,7 +1,11 @@
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
-const bodyParser = require("body-parser");
 const path = require("path");
+const bodyParser = require("body-parser");
+const flash = require("connect-flash");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+
 const router = require("./routes");
 
 //Conectar a la base de datos
@@ -31,8 +35,23 @@ app.set("views", path.join(__dirname + "/views"));
 //Archivos estaticos
 app.use(express.static(path.join(__dirname + "/public")));
 
+//Habilitar cookie parser
+app.use(cookieParser());
+
+//Crear la sesion
+app.use(session({
+  secret: process.env.SECRET,
+  key: process.env.KEY,
+  resave: false,
+  saveUninitialized: false
+}));
+
+//Habilitar flash messages
+app.use(flash());
+
 // Middleware (ususario logueado, flash messages, fecha actual, etc.)
 app.use((req, res, next) => {
+  res.locals.messages = req.flash();
   const fecha = new Date();
   res.locals.year = fecha.getFullYear();
   next();
