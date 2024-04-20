@@ -8,15 +8,7 @@ const Users = db.define('users', {
         primaryKey: true,
         autoIncrement: true
     },
-    nombre: {
-        type: Sequelize.STRING(60),
-        allowNull: false,
-        validate: {
-            notEmpty: {
-                msg: 'El nombre no puede ir vacio'
-            }
-        }
-    },
+    nombre: Sequelize.STRING(60),
     imagen: Sequelize.STRING(60),
     email: {
         type: Sequelize.STRING(60),
@@ -25,14 +17,20 @@ const Users = db.define('users', {
             isEmail: {
                 msg: 'Agrega un correo valido'
             },
-            notEmpty: {
-                msg: 'El email no puede ir vacio'
+            isUnique(value) {
+                return Users.findOne({ where: { email: value } })
+                    .then(user => {
+                        if (user) {
+                            throw new Error('El correo ya esta registrado');
+                        }
+                    })
             }
+                        
+            
         },
-        unique: {
-            args: true,
-            msg: 'Usuario ya registrado'
-        }
+        unique: true,
+
+
     },
     password: {
         type: Sequelize.STRING(60),
@@ -43,8 +41,6 @@ const Users = db.define('users', {
             }
         }
     },
-    token: Sequelize.STRING,
-    expiracion: Sequelize.DATE,
     activo: {
         type: Sequelize.INTEGER,
         defaultValue: 0
