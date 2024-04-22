@@ -59,7 +59,7 @@ const Users = db.define('users', {
 //Metodos personalizados
 
 //Verificar si el password enviado es igual al password de la base de datos
-Users.prototype.validarPassword = function(password) {
+Users.prototype.verifyPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 }
 
