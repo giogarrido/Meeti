@@ -3,15 +3,18 @@ const router = express.Router();
 
 const homeController = require('../controllers/homeController');
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
 module.exports = function () {
     router.get('/', homeController.home);
 
     router.get('/crear-cuenta', userController.formCreateAccount);
     router.post('/crear-cuenta', userController.createAccount);
+    router.get('/confirmar-cuenta/:email', userController.confirmAccount);
 
     //Inicio de sesion
     router.get('/iniciar-sesion', userController.formLogin);
+    router.post('/iniciar-sesion', authController.login);
     
     return router;
     
