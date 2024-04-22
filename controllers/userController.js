@@ -74,3 +74,21 @@ exports.formLogin = (req, res) => {
     nombrePagina: "Iniciar sesión",
   });
 };
+
+exports.confirmAccount = async (req, res) => {
+  const { email } = req.params;
+
+  const user = await Users.findOne({ where: { email } });
+
+  if (!user) {
+    req.flash("error", "No existe esa cuenta");
+    res.redirect("/crear-cuenta");
+    return;
+  }
+
+  user.activo = 1;
+  await user.save();
+
+  req.flash("exito", "Cuenta activada correctamente");
+  res.redirect("/iniciar-sesion");
+}
