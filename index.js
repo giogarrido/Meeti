@@ -12,6 +12,8 @@ const router = require("./routes");
 //Conectar a la base de datos
 const db = require("./config/db");
 require("./models/Users");
+require("./models/Categorias");
+require("./models/Grupos");
 db.sync()
   .then(() => console.log("DB is connected"))
   .catch((error) => console.log(error));
