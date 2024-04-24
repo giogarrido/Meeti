@@ -1,7 +1,53 @@
 const Categorias = require('../models/Categorias');
 const Grupos = require('../models/Grupos');
 const { body, validationResult } = require("express-validator");
+const multer = require('multer');
+const shortid = require('shortid');
 
+const configuracionMulter = {
+    limits: { fileSize: 600000 },
+    storage: fileStorage = multer.diskStorage({
+        destination: (req, file, cb) => {
+            cb(null, __dirname + '/../public/uploads/grupos/');
+        },
+        filename: (req, file, cb) => {
+            const extension = file.mimetype.split('/')[1]; //image/jpeg
+            cb(null, `${shortid.generate()}.${extension}`);
+        }
+    }),
+    fileFilter(req, file, cb) {
+        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+            cb(null, true);
+        } else {
+            cb(new Error('Formato no válido'));
+        }
+    }
+}
+
+const upload = multer(configuracionMulter).single('imagen');
+
+//subir imagen al servidor
+
+exports.subirImagen = (req, res, next) => {
+    upload(req, res, function(error) {
+        if (error) {
+            if (error instanceof multer.MulterError) {
+                if (error.code === 'LIMIT_FILE_SIZE') {
+                    req.flash('error', 'El archivo es muy grande: Máximo 100kb');
+                } else {
+                    req.flash('error', error.message);
+                }
+            } else if (error.hasOwnProperty('message')) {
+                req.flash('error', error.message);
+            }
+            res.redirect('back');
+            return;
+        } else {
+            next();
+        }
+    });
+
+}
 
 exports.formNewGroup = async(req, res) => {
     const categorias = await Categorias.findAll();
@@ -11,6 +57,7 @@ exports.formNewGroup = async(req, res) => {
     });
 }
 
+// Crear un nuevo grupo
 exports.createGroup = async(req, res) => {
     // Sanitizar los campos
     const rules = [
@@ -24,6 +71,11 @@ exports.createGroup = async(req, res) => {
 
     //Almacenar el usuario autenticado como el creador del grupo
     group.userId = req.user.id;
+
+    //Leer la imagen
+    if (req.file) {
+        group.imagen = req.file.filename;
+    }
 
 
     //Almacenar la url
@@ -43,3 +95,5 @@ exports.createGroup = async(req, res) => {
         res.redirect('/nuevo-grupo');
     }
 }
+
+

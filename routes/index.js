@@ -24,7 +24,10 @@ module.exports = function () {
     //Nuevos grupos
 
     router.get('/nuevo-grupo', authController.userAuthenticated, groupController.formNewGroup);
-    router.post('/nuevo-grupo', authController.userAuthenticated, groupController.createGroup);
+
+    router.post('/nuevo-grupo', groupController.subirImagen, groupController.createGroup);
+
+
     
     return router;
     
