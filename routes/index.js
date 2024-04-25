@@ -25,9 +25,15 @@ module.exports = function () {
 
     router.get('/nuevo-grupo', authController.userAuthenticated, groupController.formNewGroup);
 
-    router.post('/nuevo-grupo', groupController.subirImagen, groupController.createGroup);
+    router.post('/nuevo-grupo', authController.userAuthenticated, groupController.subirImagen, groupController.createGroup);
 
+    //Editar grupo
+    router.get('/editar-grupo/:id', authController.userAuthenticated, groupController.formEditGroup);
+    router.post('/editar-grupo/:id', authController.userAuthenticated, groupController.editGroup);
 
+    //Editar imagen
+    router.get('/imagen-grupo/:grupoId', authController.userAuthenticated, groupController.formEditImage);
+    router.post('/imagen-grupo/:grupoId', authController.userAuthenticated, groupController.subirImagen, groupController.editImage);
     
     return router;
     
