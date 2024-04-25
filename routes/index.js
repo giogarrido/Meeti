@@ -35,6 +35,11 @@ module.exports = function () {
     router.get('/imagen-grupo/:grupoId', authController.userAuthenticated, groupController.formEditImage);
     router.post('/imagen-grupo/:grupoId', authController.userAuthenticated, groupController.subirImagen, groupController.editImage);
     
+    //Eliminar grupo
+    router.get('/eliminar-grupo/:grupoId', authController.userAuthenticated, groupController.formDeleteGroup);
+    router.post('/eliminar-grupo/:grupoId', authController.userAuthenticated, groupController.deleteGroup);
+
+
     return router;
     
 }
