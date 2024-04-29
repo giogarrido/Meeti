@@ -46,7 +46,24 @@ function buscarDireccion (e) {
                 //asignar al contenedor de markers
                 markers.addLayer(marker);
 
-                //
+                //detectar movimiento del marker
+                marker.on('moveend', function(e) {
+                    marker = e.target;
+                    const posicion = marker.getLatLng();
+                    map.panTo(new L.LatLng(posicion.lat, posicion.lng));
+                    console.log(posicion);
+
+                    //reverse geocoding
+                    provider.search({ query: posicion.lat + ', ' + posicion.lng })
+                        .then((result) => {
+                            console.log(result);
+                            if(result.length > 0) {
+                                marker.bindPopup(result[0].label);
+                            }
+                        })
+
+
+                });
                               
                 }
 
