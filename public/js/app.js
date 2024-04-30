@@ -54,13 +54,22 @@ function buscarDireccion (e) {
                     console.log(posicion);
 
                     //reverse geocoding
-                    provider.search({ query: posicion.lat + ', ' + posicion.lng })
-                        .then((result) => {
+                    // provider.search({ query: posicion.lat + ', ' + posicion.lng })
+                    //     .then((result) => {
+                    //         console.log(result);
+                    //         if(result.length > 0) {
+                    //             marker.bindPopup(result[0].label);
+                    //         }
+                    //     })
+                    // reverse geocoding con esri-leaflet
+                    L.esri.Geocoding.reverseGeocode()
+                        .latlng(posicion)
+                        .run(function (error, result) {
                             console.log(result);
                             if(result.length > 0) {
-                                marker.bindPopup(result[0].label);
+                                marker.bindPopup(result.address.Match_addr);
                             }
-                        })
+                        });
 
 
                 });
