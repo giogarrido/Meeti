@@ -64,9 +64,9 @@ exports.createGroup = async (req, res) => {
 
   body("*").trim().escape();
 
-  console.log(req.body);
+  //console.log(req.body);
   const group = req.body;
-  console.log(group);
+  //console.log(group);
 
   //Almacenar el usuario autenticado como el creador del grupo
   group.userId = req.user.id;

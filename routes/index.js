@@ -42,7 +42,7 @@ module.exports = function () {
 
     // Nuevos Meeti
     router.get('/nuevo-meeti', authController.userAuthenticated, meetiController.formNewMeeti);
-    //router.post('/nuevo-meeti', authController.userAuthenticated, meetiController.createMeeti);
+    router.post('/nuevo-meeti', authController.userAuthenticated,meetiController.sanitizeMeeti , meetiController.createMeeti);
 
 
     return router;
