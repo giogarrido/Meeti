@@ -64,3 +64,65 @@ exports.sanitizeMeeti = (req, res, next) => {
     
     next();
 }
+
+// Muestra el formulario para editar un meeti
+exports.formEditMeeti = async (req, res) => {
+    const consultas = [];
+    consultas.push(Grupos.findAll({ where: { userId: req.user.id } }));
+    consultas.push(Meeti.findByPk(req.params.id));
+
+    // Promise con await
+    const [grupos, meeti] = await Promise.all(consultas);
+
+    if (!grupos || !meeti) {
+        req.flash('error', 'Operación no válida');
+        res.redirect('/administracion');
+        return next();
+    }
+
+    res.render('editar-meeti', {
+        nombrePagina: `Editar Meeti: ${meeti.titulo}`,
+        grupos,
+        meeti
+    })
+}
+
+// Almacena los cambios en la base de datos
+
+exports.editMeeti = async (req, res) => {
+    const meeti = await Meeti.findOne({
+        where: { id: req.params.id, userId: req.user.id },
+      });
+
+    // Si no existe el meeti
+    if (!meeti) {
+        req.flash('error', 'Operación no válida');
+        res.redirect('/administracion');
+        return next();
+    }
+
+    // Asignar los valores
+    const { grupoId, titulo, invitado, fecha, hora, cupo, descripcion, direccion, ciudad, estado, pais, lat, lng } = req.body;
+
+    // Asignar los valores
+    meeti.grupoId = grupoId;
+    meeti.titulo = titulo;
+    meeti.invitado = invitado;
+    meeti.fecha = fecha;
+    meeti.hora = hora;
+    meeti.cupo = cupo;
+    meeti.descripcion = descripcion;
+    meeti.direccion = direccion;
+    meeti.ciudad = ciudad;
+    meeti.estado = estado;
+    meeti.pais = pais;
+
+    // Asignar point (ubicacion)
+    const point = { type: 'Point', coordinates: [parseFloat(lat), parseFloat(lng)] };
+    meeti.ubicacion = point;
+
+    // Almacenar en la base de datos
+    await meeti.save();
+    req.flash('exito', 'Cambios almacenados correctamente');
+    res.redirect('/administracion');
+}

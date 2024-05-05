@@ -44,6 +44,9 @@ module.exports = function () {
     router.get('/nuevo-meeti', authController.userAuthenticated, meetiController.formNewMeeti);
     router.post('/nuevo-meeti', authController.userAuthenticated,meetiController.sanitizeMeeti , meetiController.createMeeti);
 
+    //Editar Meeti
+    router.get('/editar-meeti/:id', authController.userAuthenticated, meetiController.formEditMeeti);
+    router.post('/editar-meeti/:id', authController.userAuthenticated, meetiController.editMeeti);
 
     return router;
     

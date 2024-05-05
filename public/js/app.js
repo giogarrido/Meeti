@@ -4,8 +4,8 @@ import { OpenStreetMapProvider } from 'leaflet-geosearch';
 
 // obtener valores de la base de datos
 
-const lat = document.querySelector('#lat').value ||  27.4846619;
-const lng = document.querySelector('#lng').value ||  -109.9337782;
+const lat = document.querySelector('#lat').value ||  27.484084414358;
+const lng = document.querySelector('#lng').value ||  -109.932763925678;
 const direccion  = document.querySelector('#direccion').value || '';
 const map = L.map('mapa').setView([lat, lng], 15);
 
@@ -25,7 +25,7 @@ if(lat && lng ){
     })
     .addTo(map)
     .bindPopup(direccion)
-    .openPopup();
+    .openPopup(); // abre el popup al inicio
 
     // asignar al contenedor markers
     markers.addLayer(marker);
@@ -42,7 +42,7 @@ if(lat && lng ){
             llenarInputs(result);
         
             // asigna los valores al popup del marker
-            marker.bindPopup(result.address.LongLabel);
+            marker.bindPopup(result.address.LongLabel).openPopup();
         });
     })
 }

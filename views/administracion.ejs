@@ -10,34 +10,38 @@
     </div>
 
     <div class="seccion-admin">
-        <h2>Tus Meeti´s</h2>
-        <ul>
-            <li>
-                <div class="informacion-admin">
-                    <p class="fecha">Lunes, 22 de Mayo de 2024</p>
-                    <h3>E-Commerce en México</h3>
-                    <small>23 asistentes</small>
-                </div>
-                <div class="acciones contenedor-botones">
-                    <a href="#" class="btn btn-verde">Editar</a>
-                    <a href="#" class="btn btn-azul2">Asistentes</a>
-                    <a href="#" class="btn btn-rojo">Eliminar</a>
-                </div>
-            </li>
-            <li>
-                <div class="informacion-admin">
-                    <p class="fecha">Miércoles, 24 de Mayo de 2024</p>
-                    <h3>Facebook</h3>
-                    <small>50 asistentes</small>
-                </div>
-                <div class="acciones contenedor-botones">
-                    <a href="#" class="btn btn-verde">Editar</a>
-                    <a href="#" class="btn btn-azul2">Asistentes</a>
-                    <a href="#" class="btn btn-rojo">Eliminar</a>
-                </div>
-            </li>
-        </ul>
+        <h2>Próximos Meeti's</h2>
+        <% if (meetis.length) { %>
+            <ul>
+                <% meetis.forEach(meeti=> {%>
+                    <li>
+                        <div class="informacion-admin">
+                            <% moment.locale('es') %>
+                            <% const fecha = meeti.fecha + ' '+ meeti.hora; %>
+                            <p class="fecha">
+                                <%= moment(fecha).format('LLLL') %> Horas
+                            </p>
+                            <h3>
+                                <%= meeti.titulo %>
+                            </h3>
+                            <small>
+                                <%= meeti.interesados.length %> Interesados
+                            </small>
+                        </div>
+                        <div class="acciones contenedor-botones">
+                            <a href="/editar-meeti/<%= meeti.id %>" class="btn btn-verde">Editar</a>
+                            <a href="/asistentes-meeti/<%= meeti.id %>" class="btn btn-azul2">Assistentes</a>
+                            <a href="/eliminar-meeti/<%= meeti.id %>" class="btn btn-rojo">Eliminar</a>
+                        </div>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } else { %>
+                <p>No tienes meeti's aún</p>
+                <% } %>
+    
     </div>
+
     <div class="seccion-admin">
         <h2>Tus Grupos</h2>
         <% if (grupos.length) { %>
@@ -63,7 +67,39 @@
             <% } else { %>
                 <p>No tienes grupos aún</p>
                 <% } %>
-
-
     </div>
+
+    <div class="seccion-admin">
+        <h2> Meeti's Anteriores</h2>
+        <% if (anteriores.length) { %>
+            <ul>
+                <% anteriores.forEach(meeti=> {%>
+                    <li>
+                        <div class="informacion-admin">
+                            <% moment.locale('es') %>
+                            <% const fecha = meeti.fecha + ' '+ meeti.hora; %>
+                            <p class="fecha">
+                                <%= moment(fecha).format('LLLL') %> Horas
+                            </p>
+                            <h3>
+                                <%= meeti.titulo %>
+                            </h3>
+                            <small>
+                                <%= meeti.interesados.length %> Interesados
+                            </small>
+                        </div>
+                        <div class="acciones contenedor-botones">
+                            <a href="/editar-meeti/<%= meeti.id %>" class="btn btn-verde">Editar</a>
+                            <a href="/asistentes-meeti/<%= meeti.id %>" class="btn btn-azul2">Assistentes</a>
+                            <a href="/eliminar-meeti/<%= meeti.id %>" class="btn btn-rojo">Eliminar</a>
+                        </div>
+                    </li>
+                    <% }) %>
+            </ul>
+            <% } else { %>
+                <p>No tienes meeti's anteriores aún</p>
+                <% } %>
+    
+    </div>
+
 </main>
