@@ -126,3 +126,33 @@ exports.editMeeti = async (req, res) => {
     req.flash('exito', 'Cambios almacenados correctamente');
     res.redirect('/administracion');
 }
+
+// Muestra el formulario para eliminar un meeti
+exports.formDeleteMeeti = async (req, res) => {
+    const meeti = await Meeti.findOne({
+        where: { id: req.params.id, userId: req.user.id }
+ 
+    });
+
+    if (!meeti) {
+        req.flash('error', 'Operación no válida');
+        res.redirect('/administracion');
+        return next();
+    }
+
+    // Mostrar la vista
+    res.render('eliminar-meeti', {
+        nombrePagina: `Eliminar Meeti: ${meeti.titulo}`
+    })
+}
+
+// Elimina el meeti de la base de datos
+
+exports.deleteMeeti = async (req, res) => {
+    await Meeti.destroy({
+        where: { id: req.params.id }
+    });
+
+    req.flash('exito', 'Meeti eliminado');
+    res.redirect('/administracion');
+}
